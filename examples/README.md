@@ -16,15 +16,15 @@ The home network configuration provides a basic but secure setup for residential
 ```mermaid
 flowchart LR
     subgraph Internet
-        WAN[WAN\neth0]
+        WAN[WAN\eth0]
     end
     
     subgraph Internal Networks
         direction TB
         LOCAL[Router Services]
-        LAN[LAN Network\neth1]
-        IOT[IoT Devices\neth3]
-        GUEST[Guest Network\neth2]
+        LAN[LAN Network\eth1]
+        IOT[IoT Devices\eth3]
+        GUEST[Guest Network\eth2]
     end
 
     WAN -.->|HTTPS/HTTP| LOCAL
@@ -98,9 +98,9 @@ flowchart LR
     MGMT -->|Management| SERVERS
     MGMT -->|Management| VOIP
 
-    classDef internet fill:#f96,stroke:#333
-    classDef internal fill:#9cf,stroke:#333
-    classDef admin fill:#9f9,stroke:#333
+    classDef internet fill:#e88d4f,stroke:#2a2a2a,color:#000
+    classDef internal fill:#6b9ac4,stroke:#2a2a2a,color:#000
+    classDef admin fill:#7eb37e,stroke:#2a2a2a,color:#000
     class WAN internet
     class LOCAL,SERVERS,OFFICE,VOIP internal
     class MGMT admin
@@ -169,10 +169,10 @@ flowchart LR
     MGMT -->|Management| SERVERS
     MGMT -->|Management| DB
 
-    classDef internet fill:#f96,stroke:#333
-    classDef dmz fill:#ff9,stroke:#333
-    classDef internal fill:#9cf,stroke:#333
-    classDef admin fill:#9f9,stroke:#333
+    classDef internet fill:#e88d4f,stroke:#2a2a2a,color:#000
+    classDef dmz fill:#d4c347,stroke:#2a2a2a,color:#000
+    classDef internal fill:#6b9ac4,stroke:#2a2a2a,color:#000
+    classDef admin fill:#7eb37e,stroke:#2a2a2a,color:#000
     class WAN internet
     class DMZS dmz
     class LOCAL,SERVERS,DB,INTERNAL,VOIP internal
