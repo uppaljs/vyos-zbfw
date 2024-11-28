@@ -7,6 +7,8 @@ This is a Python port of [ZoBo](https://github.com/hasdf/zobo-vyos/tree/master),
 ```bash
 git clone https://github.com/uppaljs/vyos-zbfw
 cd vyos-zbfw
+virtualenv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
