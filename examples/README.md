@@ -36,8 +36,8 @@ flowchart LR
     IOT -->|DNS/DHCP| LOCAL
     IOT -->|Updates| WAN
 
-    classDef internet fill:#f96,stroke:#333
-    classDef internal fill:#9cf,stroke:#333
+    classDef internet fill:#e88d4f,stroke:#2a2a2a,color:#000
+    classDef internal fill:#6b9ac4,stroke:#2a2a2a,color:#000
     class WAN internet
     class LOCAL,LAN,IOT,GUEST internal
 ```
