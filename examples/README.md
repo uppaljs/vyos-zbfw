@@ -14,21 +14,32 @@ The home network configuration provides a basic but secure setup for residential
 ### Zone Structure
 
 ```mermaid
-graph TD
-    WAN[WAN\neth0]
-    LAN[LAN Network\neth1]
-    IOT[IoT Devices\neth3]
-    GUEST[Guest Network\neth2]
-    LOCAL[Router Services]
+flowchart LR
+    subgraph Internet
+        WAN[WAN\neth0]
+    end
+    
+    subgraph Internal Networks
+        direction TB
+        LOCAL[Router Services]
+        LAN[LAN Network\neth1]
+        IOT[IoT Devices\neth3]
+        GUEST[Guest Network\neth2]
+    end
 
-    WAN --> |HTTPS/HTTP| LOCAL
-    LAN --> |All Traffic| WAN
-    LAN --> |DNS/DHCP| LOCAL
-    LAN --> |Control| IOT
-    GUEST --> |DNS/DHCP| LOCAL
-    GUEST --> |Internet Only| WAN
-    IOT --> |DNS/DHCP| LOCAL
-    IOT --> |Updates| WAN
+    WAN -.->|HTTPS/HTTP| LOCAL
+    LAN -->|All Traffic| WAN
+    LAN -->|DNS/DHCP| LOCAL
+    LAN -->|Control| IOT
+    GUEST -->|DNS/DHCP| LOCAL
+    GUEST -->|Internet Only| WAN
+    IOT -->|DNS/DHCP| LOCAL
+    IOT -->|Updates| WAN
+
+    classDef internet fill:#f96,stroke:#333
+    classDef internal fill:#9cf,stroke:#333
+    class WAN internet
+    class LOCAL,LAN,IOT,GUEST internal
 ```
 
 ### Features
@@ -55,23 +66,44 @@ The SOHO configuration balances security with ease of use, suitable for small bu
 ### Zone Structure
 
 ```mermaid
-graph TD
-    WAN[WAN\neth0]
-    OFFICE[Office Network\neth1]
-    SERVERS[Internal Servers\neth2]
-    VOIP[Voice Network\neth3]
-    MGMT[Management\neth4]
-    LOCAL[Router Services]
+flowchart LR
+    subgraph Internet
+        WAN[WAN\neth0]
+    end
+    
+    subgraph Internal
+        direction TB
+        subgraph Core Services
+            LOCAL[Router Services]
+            SERVERS[Internal Servers\neth2]
+        end
+        
+        subgraph User Networks
+            OFFICE[Office Network\neth1]
+            VOIP[Voice Network\neth3]
+        end
+        
+        subgraph Admin
+            MGMT[Management\neth4]
+        end
+    end
 
-    WAN --> |HTTPS| LOCAL
-    OFFICE --> |Web/SMB/RDP| SERVERS
-    OFFICE --> |SIP| VOIP
-    OFFICE --> |Internet| WAN
-    SERVERS --> |Updates| WAN
-    VOIP --> |SIP/RTP| WAN
-    MGMT --> |SSH/SNMP/HTTPS| LOCAL
-    MGMT --> |Management| SERVERS
-    MGMT --> |Management| VOIP
+    WAN -.->|HTTPS| LOCAL
+    OFFICE -->|Web/SMB/RDP| SERVERS
+    OFFICE -->|SIP| VOIP
+    OFFICE -->|Internet| WAN
+    SERVERS -->|Updates| WAN
+    VOIP -->|SIP/RTP| WAN
+    MGMT -->|SSH/SNMP/HTTPS| LOCAL
+    MGMT -->|Management| SERVERS
+    MGMT -->|Management| VOIP
+
+    classDef internet fill:#f96,stroke:#333
+    classDef internal fill:#9cf,stroke:#333
+    classDef admin fill:#9f9,stroke:#333
+    class WAN internet
+    class LOCAL,SERVERS,OFFICE,VOIP internal
+    class MGMT admin
 ```
 
 ### Features
@@ -98,27 +130,53 @@ The enterprise configuration provides comprehensive segmentation for large organ
 ### Zone Structure
 
 ```mermaid
-graph TD
-    WAN[WAN\nDual WAN]
-    DMZ[DMZ\neth2]
-    INTERNAL[Employee Network\neth3]
-    SERVERS[App Servers\neth4]
-    DB[Database\neth5]
-    VOIP[Voice Network\neth6]
-    MGMT[Management\neth7]
-    LOCAL[Router Services]
+flowchart LR
+    subgraph Internet
+        WAN[WAN\nDual WAN]
+    end
+    
+    subgraph DMZ
+        DMZS[DMZ Servers\neth2]
+    end
+    
+    subgraph Internal
+        direction TB
+        subgraph Core Infrastructure
+            LOCAL[Router Services]
+            SERVERS[App Servers\neth4]
+            DB[Database\neth5]
+        end
+        
+        subgraph User Networks
+            INTERNAL[Employee Network\neth3]
+            VOIP[Voice Network\neth6]
+        end
+        
+        subgraph Admin
+            MGMT[Management\neth7]
+        end
+    end
 
-    WAN --> |Web/Mail| DMZ
-    DMZ --> |Web/SQL| SERVERS
-    INTERNAL --> |Web/SMB/RDP| SERVERS
-    INTERNAL --> |SQL| DB
-    INTERNAL --> |SIP| VOIP
-    SERVERS --> |SQL/PostgreSQL| DB
-    VOIP --> |SIP/RTP| WAN
-    MGMT --> |SSH/SNMP/VNC| LOCAL
-    MGMT --> |Management| DMZ
-    MGMT --> |Management| SERVERS
-    MGMT --> |Management| DB
+    WAN -.->|Web/Mail| DMZS
+    DMZS -->|Web/SQL| SERVERS
+    INTERNAL -->|Web/SMB/RDP| SERVERS
+    INTERNAL -->|SQL| DB
+    INTERNAL -->|SIP| VOIP
+    SERVERS -->|SQL/PostgreSQL| DB
+    VOIP -->|SIP/RTP| WAN
+    MGMT -->|SSH/SNMP/VNC| LOCAL
+    MGMT -->|Management| DMZS
+    MGMT -->|Management| SERVERS
+    MGMT -->|Management| DB
+
+    classDef internet fill:#f96,stroke:#333
+    classDef dmz fill:#ff9,stroke:#333
+    classDef internal fill:#9cf,stroke:#333
+    classDef admin fill:#9f9,stroke:#333
+    class WAN internet
+    class DMZS dmz
+    class LOCAL,SERVERS,DB,INTERNAL,VOIP internal
+    class MGMT admin
 ```
 
 ### Features
