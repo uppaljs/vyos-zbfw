@@ -1,0 +1,42 @@
+zones:
+  - wan
+  - lan
+  - iot
+  - guest
+  - local
+
+definitions:
+  wan:
+    interface: ["eth0"]
+    description: "Internet Connection"
+    allow_ping_to: "local"
+    allow_traffic_to:
+      local:
+        ports: ["80", "443"]  # Allow HTTP/HTTPS for management
+  local:
+    description: "Router Services"
+    is_local_zone: true
+    allow_traffic_to: "*"  # Router can access all zones
+  lan:
+    interface: ["eth1"]
+    description: "Main Home Network"
+    allow_ping_to: ["local", "wan"]
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp", "80", "443"]  # DNS, DHCP, Web UI
+      wan:  # Full internet access
+      iot:  # Allow access to IoT devices
+  guest:
+    interface: ["eth2"]
+    description: "Guest Network"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]  # Only DNS and DHCP
+      wan:  # Internet only
+  iot:
+    interface: ["eth3"]
+    description: "IoT Devices"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]  # DNS and DHCP only
+      wan:  # Internet access for updates

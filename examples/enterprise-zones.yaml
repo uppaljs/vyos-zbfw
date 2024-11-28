@@ -1,0 +1,79 @@
+zones:
+  - wan
+  - dmz
+  - internal
+  - servers
+  - database
+  - voip
+  - mgmt
+  - local
+
+definitions:
+  wan:
+    interface: ["eth0", "eth1"]  # Dual WAN
+    description: "Internet Connection"
+    allow_ping_to: ["local", "dmz"]
+    allow_traffic_to:
+      local:
+        ports: ["443"]  # HTTPS management
+      dmz:
+        ports: ["80", "443", "25", "587"]  # Web and Mail
+  local:
+    description: "Router Services"
+    is_local_zone: true
+    allow_traffic_to: "*"
+  dmz:
+    interface: ["eth2"]
+    description: "Public Services"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]
+      servers:
+        ports: ["80", "443", "1433"]  # Web and SQL
+      wan:
+        ports: ["80", "443", "25", "587"]  # Web and Mail
+  internal:
+    interface: ["eth3"]
+    description: "Employee Network"
+    allow_ping_to: ["local", "servers"]
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp", "389/tcp_udp", "636"]  # DNS, DHCP, LDAP
+      servers:
+        ports: ["80", "443", "445", "3389"]  # Web, SMB, RDP
+      database:
+        ports: ["1433", "3306"]  # SQL
+      voip:
+        ports: ["5060/tcp_udp"]
+      wan:
+  servers:
+    interface: ["eth4"]
+    description: "Application Servers"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp", "389/tcp_udp", "636"]
+      database:
+        ports: ["1433", "3306", "5432"]  # SQL and PostgreSQL
+      wan:
+        ports: ["80", "443"]  # Updates
+  database:
+    interface: ["eth5"]
+    description: "Database Servers"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]
+  voip:
+    interface: ["eth6"]
+    description: "Voice Network"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]
+      wan:
+        ports: ["5060/tcp_udp", "10000-20000/udp"]
+  mgmt:
+    interface: ["eth7"]
+    description: "Management Network"
+    allow_ping_to: "*"
+    allow_traffic_to:
+      "*":
+        ports: ["22", "161/udp", "443", "5900"]  # SSH, SNMP, HTTPS, VNC

@@ -1,0 +1,55 @@
+zones:
+  - wan
+  - office
+  - servers
+  - voip
+  - mgmt
+  - local
+
+definitions:
+  wan:
+    interface: ["eth0"]
+    description: "Internet Connection"
+    allow_ping_to: "local"
+    allow_traffic_to:
+      local:
+        ports: ["443"]  # HTTPS management only
+  local:
+    description: "Router Services"
+    is_local_zone: true
+    allow_traffic_to: "*"
+  office:
+    interface: ["eth1"]
+    description: "Office Workstations"
+    allow_ping_to: ["local", "servers"]
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp", "80", "443"]  # Basic services
+      servers:
+        ports: ["80", "443", "445", "3389"]  # Web, SMB, RDP
+      voip:
+        ports: ["5060/tcp_udp"]  # SIP
+      wan:
+  servers:
+    interface: ["eth2"]
+    description: "Internal Servers"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]
+      wan:
+        ports: ["80", "443"]  # Updates only
+  voip:
+    interface: ["eth3"]
+    description: "Voice Network"
+    allow_traffic_to:
+      local:
+        ports: ["53/tcp_udp", "67/udp"]
+      wan:
+        ports: ["5060/tcp_udp", "10000-20000/udp"]  # SIP and RTP
+  mgmt:
+    interface: ["eth4"]
+    description: "Management Network"
+    allow_ping_to: "*"
+    allow_traffic_to:
+      "*":
+        ports: ["22", "161/udp", "443"]  # SSH, SNMP, HTTPS
