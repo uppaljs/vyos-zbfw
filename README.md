@@ -1,6 +1,6 @@
 # Python ZoBo - Zone Based Firewall Bootstrapper for VyOS
 
-This is a Python port of [ZoBo](https://github.com/hasdf/zobo-vyos/tree/master), maintaining full compatibility with the original configuration format and functionality.
+This is a Python port of [ZoBo](https://github.com/cschlesselmann/zobo) [ZoBo - Fork](https://github.com/hasdf/zobo-vyos), maintaining full compatibility with the original configuration format and functionality.
 
 ## Installation
 
