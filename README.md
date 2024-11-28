@@ -5,8 +5,8 @@ This is a Python port of [ZoBo](https://github.com/hasdf/zobo-vyos/tree/master),
 ## Installation
 
 ```bash
-git clone [your-repo]
-cd [your-repo]
+git clone https://github.com/uppaljs/vyos-zbfw
+cd vyos-zbfw
 pip install -r requirements.txt
 ```
 
